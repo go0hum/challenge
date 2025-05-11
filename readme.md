@@ -1,4 +1,4 @@
-# STORI API
+# STORI ACCOUNT
 
 ## Tags and Features 0.0.1
 
@@ -26,15 +26,25 @@ instructions on how to execute the code.
 
 The configuration is as follows:
 
-Create an S3 bucket in AWS and upload the files to be read, which are the logo and the CSV.
+1. Create an S3 bucket in AWS and upload the files to be read, which are the logo and the CSV.
 
-Create an RDS MySQL database in AWS as well, and place the connection details in the database.go file on line 11 — it uses GORM for the connection.
+![s3 file](img/s3_aws.jpg)
 
-Configure the email settings on line 13, where you'll find the username and password to be changed as needed. Also, on line 34, you’ll find the configuration for the sender, recipient, and subject.
+2. Create an RDS MySQL database in AWS as well, and place the connection details in the database.go file on line 11 — it uses GORM for the connection.
 
-To test the code, you need to go into each service (e.g., CSV, email, and MySQL) and run the following command:
+![RDS mysql database](img/rds_aws.jpg)
 
+3. Configure the email settings on line 13, where you'll find the username and password to be changed as needed. Also, on line 34, you’ll find the configuration for the sender, recipient, and subject.
+
+4. To test the code, you need to go into each service (e.g., CSV, email, and MySQL) and run the following command:
+
+```go
 go run .
+```
+
+![RDS mysql database](img/db_local.jpg)
+
+![RDS mysql database](img/email_stori.jpg)
 
 ## References
 
