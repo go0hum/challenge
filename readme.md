@@ -29,6 +29,25 @@ The configuration is as follows:
 1. Create an S3 bucket in AWS and upload the files to be read, which are the logo and the CSV.
 
 ![s3 file](img/s3_aws.jpg)
+![s3 file](img/s3_aws_2.jpg)
+
+no olvides en configurarlo correctamente los buckets ya sea uno o dos como en mi caso en la pestaña de permisos
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::challenge-storicard/*"
+        }
+    ]
+}
+```
+
 
 2. Create an RDS MySQL database in AWS as well, and place the connection details in the database.go file on line 11 — it uses GORM for the connection.
 
