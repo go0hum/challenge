@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+</head>
+
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <img src="{{.Logo}}" style="margin-bottom: 10px;" />
+            </td>
+        </tr>
+        <tr style="background: #00D180; color: #FFF; padding: 20px; text-align:center">
+            <td colspan="2">
+                <h5 style="font-size: 20px">Total balance</h5>
+                <h2 style="font-size: 40px">$ {{.Total}} USD</h2>
+            </td>
+        </tr>
+        <tr style="padding: 20px;">
+            <td colspan="2">
+                <h3 style="color: #00D180; font-size: 30px">Average amount</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span style="font-size: 20px">Debit: $ {{ .TotalDebit }} USD</span>
+            </td>
+            <td>
+                <span style="font-size: 20px">Credit: $ {{ .TotalCredit }} USD</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h3 style="color: #00D180; font-size: 30px">Number of transactions</h3>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; color: #00D180">Month</th>
+                            <th style="text-align: left; color: #00D180">Transactions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range $mes, $cantidad := .ConteoMes }}
+                        <tr>
+                            <td style="font-size: 20px">{{$mes}}</td>
+                            <td style="font-size: 20px">{{$cantidad}}</td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+                <p>
+                    Hello {{.Name}}
+                    <a href="{{.URL}}">Confirm email address</a>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="background: #F0F0F0; color: #11947E; padding: 10px 20px; text-align:center">
+                storicard.com | 2025
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
