@@ -1,8 +1,10 @@
 # STORI ACCOUNT
 
-## Tags and Features 0.0.1
+## Tags and Features 1.0.0
 
-This version is primarily based on ensuring that each service works correctly and independently, with each running locally.
+This version has been modified so that you can run the project from the handler/command/main.go file.
+
+Unlike the previous version, all services are integrated into a single one and run simultaneously from a Docker virtual machine.
 
 ## Description
 
@@ -31,6 +33,23 @@ The configuration is as follows:
 ![s3 file](img/local_file.jpg)
 ![s3 file](img/s3_aws_2.jpg)
 
+Don't forget to properly configure the buckets — whether it's one or two, as in my case — in the permissions tab
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::challenge-storicard/*"
+        }
+    ]
+}
+```
+
 2. Run the Docker Compose project using the following command, and make sure to rename the .env_example file to .env. Then, in line 11 of the mysql/database/database.go file, update the access credentials as needed.
 
 **USER**:**PASSWORD**@tcp(**URL**:**PORT**)/**DATABASE**?charset=utf8mb4&parseTime=True&loc=Local
@@ -47,15 +66,17 @@ From there, you'll be able to connect to the database using the credentials in t
 
 ![Docker local](img/docker_local.jpg)
 
-3. Configure the email settings on line 13, where you'll find the username and password to be changed as needed. Also, on line 34, you’ll find the configuration for the sender, recipient, and subject.
+Don't forget to install the tables into the database using the stori.sql file located in the root directory
+
+3. Configure the email settings on line 13, where you'll find the username and password to be changed as needed. Also, on line 45 in the file main.go, you’ll find the configuration for the sender, recipient, and subject.
 
 4. To test the code, you need to go into each service (e.g., CSV, email, and MySQL) and run the following command:
 
 ```go
+cd handler
+cd command
 go run .
 ```
-
-![RDS mysql database](img/db_local.jpg)
 
 ![RDS mysql database](img/email_stori.jpg)
 
