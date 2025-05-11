@@ -26,32 +26,26 @@ instructions on how to execute the code.
 
 The configuration is as follows:
 
-1. Create an S3 bucket in AWS and upload the files to be read, which are the logo and the CSV.
+1. Create an S3 bucket in AWS and upload the file to be read, which are the logo and create a file with the name txns.cv in csv folder
 
-![s3 file](img/s3_aws.jpg)
+![s3 file](img/local_file.jpg)
 ![s3 file](img/s3_aws_2.jpg)
 
-no olvides en configurarlo correctamente los buckets ya sea uno o dos como en mi caso en la pestaña de permisos
+2. Run the Docker Compose project using the following command, and make sure to rename the .env_example file to .env. Then, in line 11 of the mysql/database/database.go file, update the access credentials as needed.
 
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "PublicReadGetObject",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::challenge-storicard/*"
-        }
-    ]
-}
+**USER**:**PASSWORD**@tcp(**URL**:**PORT**)/**DATABASE**?charset=utf8mb4&parseTime=True&loc=Local
+
+with 
+
+test:test@tcp(localhost:3306)/stori?charset=utf8mb4&parseTime=True&loc=Local
+
+```
+docker-compose up -d 
 ```
 
+From there, you'll be able to connect to the database using the credentials in the .env file, and also check the emails if any are sent.
 
-2. Create an RDS MySQL database in AWS as well, and place the connection details in the database.go file on line 11 — it uses GORM for the connection.
-
-![RDS mysql database](img/rds_aws.jpg)
+![Docker local](img/docker_local.jpg)
 
 3. Configure the email settings on line 13, where you'll find the username and password to be changed as needed. Also, on line 34, you’ll find the configuration for the sender, recipient, and subject.
 
