@@ -1,10 +1,8 @@
 # STORI ACCOUNT
 
-## Tags and Features 1.0.0
+## Tags and Features 2.0.0
 
-This version has been modified so that you can run the project from the handler/command/main.go file.
-
-Unlike the previous version, all services are integrated into a single one and run simultaneously from a Docker virtual machine.
+This version takes a completely different approach from versions 0 and 1, as it fully leverages AWS services such as Lambda, RDS, and S3—except for Amazon's email service. Additionally, the project follows a hexagonal architecture.
 
 ## Description
 
@@ -28,9 +26,9 @@ instructions on how to execute the code.
 
 The configuration is as follows:
 
-1. Create an S3 bucket in AWS and upload the file to be read, which are the logo and create a file with the name txns.cv in csv folder
+1. Create an S3 bucket in AWS and upload the read-only file to the corresponding buckets or to the same bucket for both. Remember to grant read permissions to the users
 
-![s3 file](img/local_file.jpg)
+![s3 file](img/s3_aws.jpg)
 ![s3 file](img/s3_aws_2.jpg)
 
 Don't forget to properly configure the buckets — whether it's one or two, as in my case — in the permissions tab
@@ -50,39 +48,83 @@ Don't forget to properly configure the buckets — whether it's one or two, as i
 }
 ```
 
-2. Run the Docker Compose project using the following command, and make sure to rename the .env_example file to .env. Then, in line 11 of the mysql/database/database.go file, update the access credentials as needed.
+2. Create the database in RDS using the free tier of MySQL.
 
-**USER**:**PASSWORD**@tcp(**URL**:**PORT**)/**DATABASE**?charset=utf8mb4&parseTime=True&loc=Local
+![RDS aws](img/rds_aws.jpg)
 
-with 
+Don't forget to install the tables into the database using the stori.sql file located in the root directory and configure the necessary information in the environment variables of the Lambda function that will be created in the next step.
 
-test:test@tcp(localhost:3306)/stori?charset=utf8mb4&parseTime=True&loc=Local
+3. Configure the Lambda function as follows:
+
+![Lambda aws](img/lambda_aws.jpg)
+
+When selecting the security settings, don’t forget to choose the S3 access option.
+
+![Permissions lambda](img/lambda_permisos.jpg)
+
+4. Configure the email settings in the environment variables of the created Lambda function
+
+![environment vars](img/variable_entorno.jpg)
+
+The environment variables are as follows:
 
 ```
-docker-compose up -d 
+AWS_S3_BUCKET="files.stori"
+AWS_S3_FILE="txns.csv"
+
+DATABASE_USER=""
+DATABASE_PASS=""
+DATABASE_HOST=""
+DATABASE_NAME=""
+
+
+EMAIL_USER=""
+EMAIL_PASSWORD=""
+#EMAIL_SMTP_LINK=""
+EMAIL_SMTP_LINK=""
+
+EMAIL_THEME_LOGO=""
+#EMAIL_THEME=""
+EMAIL_THEME=""
+
+EMAIL_FROM=""
+EMAIL_TO=""
+EMAIL_SUBJECT=""
 ```
 
-From there, you'll be able to connect to the database using the credentials in the .env file, and also check the emails if any are sent.
-
-![Docker local](img/docker_local.jpg)
-
-Don't forget to install the tables into the database using the stori.sql file located in the root directory
-
-3. Configure the email settings on line 13, where you'll find the username and password to be changed as needed. Also, on line 45 in the file main.go, you’ll find the configuration for the sender, recipient, and subject.
-
-4. To test the code, you need to go into each service (e.g., CSV, email, and MySQL) and run the following command:
+5. To generate the bootstrap file, it is necessary to run the following command where we define the operating system and architecture. This command is only useful in Windows PowerShell, although an equivalent exists for other systems
 
 ```go
-cd handler
-cd command
-go run .
+$env:GOOS = "linux"; $env:GOARCH = "arm64"; go build -o bootstrap ./cmd/lambda
 ```
 
-![RDS mysql database](img/email_stori.jpg)
+![Generate bootstrap](img/generate_bootstrap.jpg)
+
+In modern versions, it's no longer the main file followed by main.zip. It was changed to bootstrap, and then it is packaged into a zip file, which would look like this: [boostrap email.html] -> function.zip
+
+![Function zip](img/function_zip.jpg)
+
+Remember that both bootstrap and the Email must be in the same function.zip file, compressed
+
+To test it, go to your Amazon console, click on the "Test" tab, and then click "Test"
+
+![Test tab](img/test_tab.jpg)
+![Test button](img/test_button.jpg)
+
+You should see the following:
+
+![Test result](img/test_result.jpg)
+
+In the end, you should see the email you receive depending on the email you added in the environment variables, and the record should have been added correctly
+
+![Email stori](img/email_stori.jpg)
+![Database result](img/db_local.jpg)
 
 ## References
 
 https://medium.com/@dhanushgopinath/sending-html-emails-using-templates-in-golang-9e953ca32f3d
 https://gorm.io/docs/create.html#Batch-Insert
+https://www.youtube.com/watch?v=kSz3oms4yZM
+
 
 

@@ -1,0 +1,2 @@
+﻿cmd/lambda/.env
+cmd/lambda/aws-credentials.ps1
